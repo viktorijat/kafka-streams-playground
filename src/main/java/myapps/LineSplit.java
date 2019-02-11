@@ -16,16 +16,14 @@
  */
 package myapps;
 
+import java.util.Arrays;
+import java.util.Properties;
+import java.util.concurrent.CountDownLatch;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.kstream.ValueMapper;
-
-import java.util.Arrays;
-import java.util.Properties;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * In this example, we implement a simple LineSplit program using the high-level Streams DSL
@@ -35,7 +33,8 @@ import java.util.concurrent.CountDownLatch;
  */
 public class LineSplit {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-linesplit");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -45,8 +44,8 @@ public class LineSplit {
         final StreamsBuilder builder = new StreamsBuilder();
 
         builder.stream("streams-plaintext-input")
-               .flatMapValues(value -> Arrays.asList(value.split("\\W+")))
-               .to("streams-linesplit-output");
+                .flatMapValues(value -> Arrays.asList(value.toString().split("\\W+")))
+                .to("streams-linesplit-output");
 
         final Topology topology = builder.build();
         final KafkaStreams streams = new KafkaStreams(topology, props);
@@ -64,7 +63,7 @@ public class LineSplit {
         try {
             streams.start();
             latch.await();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             System.exit(1);
         }
         System.exit(0);

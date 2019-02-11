@@ -41,7 +41,8 @@ import java.util.concurrent.CountDownLatch;
  */
 public class WordCount {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-wordcount");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -73,7 +74,7 @@ public class WordCount {
         try {
             streams.start();
             latch.await();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             System.exit(1);
         }
         System.exit(0);

@@ -32,7 +32,8 @@ import java.util.concurrent.CountDownLatch;
  */
 public class Pipe {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-pipe");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -59,7 +60,7 @@ public class Pipe {
         try {
             streams.start();
             latch.await();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             System.exit(1);
         }
         System.exit(0);
